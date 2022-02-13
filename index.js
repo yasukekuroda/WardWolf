@@ -3,6 +3,21 @@ const input = document.getElementById("input");
 const ul = document.getElementById("ul");
 const todos = JSON.parse(localStorage.getItem("todos"));
 
+const savedata = () => {
+    const lists = document.querySelectorAll("li");
+    let todos = [];
+
+    lists.forEach(list => {
+        let todo = {
+            text: list.innerText,
+            completed: list.classList.contains("text-decoration-line-through")
+        };
+        todos.push(todo);
+    })
+
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
 const createListElement = (text, completed) => {
     const li = document.createElement("li");
     li.innerText = text;
@@ -25,6 +40,14 @@ const createListElement = (text, completed) => {
     savedata();
 }
 
+const add = (text, completed) => {
+    if (text.length <= 0) return;
+
+    createListElement(text, completed);
+
+    input.value = "";
+}
+
 if (todos) {
     todos.forEach(todo => add(todo.text, todo.completed))
 }
@@ -33,29 +56,3 @@ form.addEventListener("submit", function (event) {
     event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
     add(input.value, false);
 });
-
-
-
-
-function add(text, completed) {
-    if (text.length <= 0) return;
-
-    createListElement(text, completed);
-
-    input.value = "";
-}
-
-function savedata() {
-    const lists = document.querySelectorAll("li");
-    let todos = [];
-
-    lists.forEach(list => {
-        let todo = {
-            text: list.innerText,
-            completed: list.classList.contains("text-decoration-line-through")
-        };
-        todos.push(todo);
-    })
-
-    localStorage.setItem("todos", JSON.stringify(todos));
-}
