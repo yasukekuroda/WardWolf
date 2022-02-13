@@ -13,32 +13,30 @@ form.addEventListener("submit", function (event) {
 });
 
 function add(text, completed) {
-    let todoText = text;
+    if (text.length <= 0) return;
 
-    if (todoText.length > 0) {
-        const li = document.createElement("li");
-        li.innerText = todoText;
-        li.classList.add("list-group-item");
+    const li = document.createElement("li");
+    li.innerText = text;
+    li.classList.add("list-group-item");
 
-        if (completed) {
-            li.classList.add("text-decoration-line-through");
-        }
-
-        li.addEventListener("contextmenu", function (event) {
-            event.preventDefault();
-            li.remove();
-            savedata();
-        });
-
-        li.addEventListener("click", function () {
-            li.classList.toggle("text-decoration-line-through");
-            savedata();
-        })
-
-        ul.appendChild(li);
-        input.value = "";
-        savedata();
+    if (completed) {
+        li.classList.add("text-decoration-line-through");
     }
+
+    li.addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+        li.remove();
+        savedata();
+    });
+
+    li.addEventListener("click", function () {
+        li.classList.toggle("text-decoration-line-through");
+        savedata();
+    })
+
+    ul.appendChild(li);
+    input.value = "";
+    savedata();
 }
 
 function savedata() {
