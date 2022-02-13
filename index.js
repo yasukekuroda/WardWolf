@@ -38,28 +38,27 @@ const createListElement = (text, completed) => {
 
     const ul = document.getElementById("ul");
     ul.appendChild(li);
-
-    saveDataToLocalStorage();
 }
 
-const add = (text, completed) => {
+const addTodo = (text, completed) => {
     if (text.length <= 0) return;
-
     createListElement(text, completed);
 }
 
 const main = () => {
     // LocalStorageからtodoを取得する
     const todos = JSON.parse(localStorage.getItem("todos"));
-    if (todos) todos.forEach(todo => add(todo.text, todo.completed))
+    if (todos) todos.forEach(todo => addTodo(todo.text, todo.completed))
 
-    // form送信時の処理を登録する
     const form = document.getElementById("form");
     const input = document.getElementById("input");
 
+    // form送信時の処理を登録する
     form.addEventListener("submit", function (event) {
         event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
-        add(input.value, false);
+
+        addTodo(input.value, false);
+        saveDataToLocalStorage();
         input.value = "";
     });
 }
