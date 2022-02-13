@@ -1,8 +1,3 @@
-const form = document.getElementById("form");
-const input = document.getElementById("input");
-const ul = document.getElementById("ul");
-const todos = JSON.parse(localStorage.getItem("todos"));
-
 const formatTodo = (list) => (
     {
         text: list.innerText,
@@ -12,7 +7,7 @@ const formatTodo = (list) => (
 
 const saveDataToLocalStorage = () => {
     const lists = document.querySelectorAll("li");
-    let todos = [];
+    const todos = [];
 
     lists.forEach(list => {
         const todo = formatTodo(list);
@@ -24,10 +19,11 @@ const saveDataToLocalStorage = () => {
 
 const createListElement = (text, completed) => {
     const li = document.createElement("li");
-    li.innerText = text;
-    li.classList.add("list-group-item");
 
+    li.innerText = text;
     if (completed) li.classList.add("text-decoration-line-through");
+
+    li.classList.add("list-group-item");
 
     li.addEventListener("contextmenu", function (event) {
         event.preventDefault();
@@ -40,7 +36,9 @@ const createListElement = (text, completed) => {
         saveDataToLocalStorage();
     })
 
+    const ul = document.getElementById("ul");
     ul.appendChild(li);
+
     saveDataToLocalStorage();
 }
 
@@ -48,15 +46,23 @@ const add = (text, completed) => {
     if (text.length <= 0) return;
 
     createListElement(text, completed);
-
-    input.value = "";
 }
 
-if (todos) {
-    todos.forEach(todo => add(todo.text, todo.completed))
+const main = () => {
+    // LocalStorageからtodoを取得する
+    const todos = JSON.parse(localStorage.getItem("todos"));
+    if (todos) todos.forEach(todo => add(todo.text, todo.completed))
+
+    // form送信時の処理を登録する
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
+        add(input.value, false);
+        input.value = "";
+    });
 }
 
-form.addEventListener("submit", function (event) {
-    event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
-    add(input.value, false);
-});
+main();
+
