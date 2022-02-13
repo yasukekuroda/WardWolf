@@ -4,28 +4,23 @@ const ul = document.getElementById("ul");
 const todos = JSON.parse(localStorage.getItem("todos"));
 
 if (todos) {
-    todos.forEach(todo => {
-        add(todo);
-    })
+    todos.forEach(todo => add(todo.text, todo.completed))
 }
 
 form.addEventListener("submit", function (event) {
     event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
-    add();
+    add(input.value, false);
 });
 
-function add(todo) {
-    let todoText = input.value;
+function add(text, completed) {
+    let todoText = text;
 
-    if (todo) {
-        todoText = todo.text;
-    }
     if (todoText.length > 0) {
         const li = document.createElement("li");
         li.innerText = todoText;
         li.classList.add("list-group-item");
 
-        if (todo && todo.completed) {
+        if (completed) {
             li.classList.add("text-decoration-line-through");
         }
 
@@ -59,6 +54,4 @@ function savedata() {
     })
 
     localStorage.setItem("todos", JSON.stringify(todos));
-
-
 }
