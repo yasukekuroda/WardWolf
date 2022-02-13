@@ -3,15 +3,19 @@ const input = document.getElementById("input");
 const ul = document.getElementById("ul");
 const todos = JSON.parse(localStorage.getItem("todos"));
 
-const savedata = () => {
+const formatTodo = (list) => (
+    {
+        text: list.innerText,
+        completed: list.classList.contains("text-decoration-line-through")
+    }
+);
+
+const saveDataToLocalStorage = () => {
     const lists = document.querySelectorAll("li");
     let todos = [];
 
     lists.forEach(list => {
-        let todo = {
-            text: list.innerText,
-            completed: list.classList.contains("text-decoration-line-through")
-        };
+        const todo = formatTodo(list);
         todos.push(todo);
     })
 
@@ -28,16 +32,16 @@ const createListElement = (text, completed) => {
     li.addEventListener("contextmenu", function (event) {
         event.preventDefault();
         li.remove();
-        savedata();
+        saveDataToLocalStorage();
     });
 
     li.addEventListener("click", function () {
         li.classList.toggle("text-decoration-line-through");
-        savedata();
+        saveDataToLocalStorage();
     })
 
     ul.appendChild(li);
-    savedata();
+    saveDataToLocalStorage();
 }
 
 const add = (text, completed) => {
