@@ -3,25 +3,12 @@ const input = document.getElementById("input");
 const ul = document.getElementById("ul");
 const todos = JSON.parse(localStorage.getItem("todos"));
 
-if (todos) {
-    todos.forEach(todo => add(todo.text, todo.completed))
-}
-
-form.addEventListener("submit", function (event) {
-    event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
-    add(input.value, false);
-});
-
-function add(text, completed) {
-    if (text.length <= 0) return;
-
+const createListElement = (text, completed) => {
     const li = document.createElement("li");
     li.innerText = text;
     li.classList.add("list-group-item");
 
-    if (completed) {
-        li.classList.add("text-decoration-line-through");
-    }
+    if (completed) li.classList.add("text-decoration-line-through");
 
     li.addEventListener("contextmenu", function (event) {
         event.preventDefault();
@@ -35,8 +22,27 @@ function add(text, completed) {
     })
 
     ul.appendChild(li);
-    input.value = "";
     savedata();
+}
+
+if (todos) {
+    todos.forEach(todo => add(todo.text, todo.completed))
+}
+
+form.addEventListener("submit", function (event) {
+    event.preventDefault();//デフォルトのイベントを発生させない。フォームをサブミットしたときのブラウザのリロードを停止する。
+    add(input.value, false);
+});
+
+
+
+
+function add(text, completed) {
+    if (text.length <= 0) return;
+
+    createListElement(text, completed);
+
+    input.value = "";
 }
 
 function savedata() {
